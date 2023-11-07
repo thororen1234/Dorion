@@ -112,7 +112,7 @@ fn main() {
 
   #[allow(clippy::single_match)]
   tauri::Builder::default()
-    .plugin(tauri_plugin_window_state::Builder::default().build())
+    //.plugin(tauri_plugin_window_state::Builder::default().build())
     .system_tray(create_systray())
     .invoke_handler(tauri::generate_handler![
       minimize,
@@ -296,11 +296,18 @@ fn modify_window(window: &Window) {
 
       settings.set_user_agent(Some("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/118.0.0.0 Safari/537.36"));
 
+      // Voice and video
+      settings.set_enable_media_stream(true);
+      settings.set_enable_webrtc(true);
+
+      wv.set_settings(&settings);
+
       // We also need to manually ask for permission to use the microphone and camera
       wv.connect_permission_request(|_, req| {
         req.allow();
         true
       });
+
     }).unwrap_or_else(|_| println!("Failed to set user-agent"));
   }
 
